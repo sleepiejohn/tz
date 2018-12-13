@@ -1,2 +1,7 @@
-*
-!_build/prod/rel/
+.elixir_ls/
+_build/
+deps/
+tmp/
+*.log
+*.md
+test/
