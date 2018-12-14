@@ -1,4 +1,6 @@
-FROM bitwalker/alpine-elixir:latest as build
+# Containerzed Build
+
+FROM bitwalker/alpine-elixir:1.7.4 as build
 
 COPY . .
 
@@ -12,16 +14,18 @@ RUN APP_NAME="tz" && \
   mkdir /export && \
   tar -xf "$RELEASE_DIR/$APP_NAME.tar.gz" -C /export
 
+# Production Image
 
-FROM erlang:21-alpine
+FROM alpine:3.8
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash openssl
 
-EXPOSE 4000
 ENV REPLACE_OS_VARS=true \
   PORT=4000
 
 COPY --from=build /export/ .
+
+EXPOSE 4000
 
 ENTRYPOINT ["./bin/tz"]
 CMD ["foreground"]
